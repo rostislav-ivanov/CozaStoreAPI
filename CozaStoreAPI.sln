@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CozaStoreAPI", "CozaStoreAPI\CozaStoreAPI.csproj", "{DF346D1A-098C-4DF0-A731-7A744ED68D19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI", "CozaStoreAPI\CozaStoreAPI.csproj", "{DF346D1A-098C-4DF0-A731-7A744ED68D19}"
+	ProjectSection(ProjectDependencies) = postProject
+		{728061FB-9703-46F4-838B-F56493A8C933} = {728061FB-9703-46F4-838B-F56493A8C933}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI.Infrastructure", "CozaStoreAPI.Infrastructure\CozaStoreAPI.Infrastructure.csproj", "{F9544C16-A45D-4ECE-AC18-24DF5582C717}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI.Core", "CozaStoreAPI.Core\CozaStoreAPI.Core.csproj", "{728061FB-9703-46F4-838B-F56493A8C933}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9544C16-A45D-4ECE-AC18-24DF5582C717} = {F9544C16-A45D-4ECE-AC18-24DF5582C717}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,14 @@ Global
 		{DF346D1A-098C-4DF0-A731-7A744ED68D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF346D1A-098C-4DF0-A731-7A744ED68D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF346D1A-098C-4DF0-A731-7A744ED68D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9544C16-A45D-4ECE-AC18-24DF5582C717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9544C16-A45D-4ECE-AC18-24DF5582C717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9544C16-A45D-4ECE-AC18-24DF5582C717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9544C16-A45D-4ECE-AC18-24DF5582C717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728061FB-9703-46F4-838B-F56493A8C933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728061FB-9703-46F4-838B-F56493A8C933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728061FB-9703-46F4-838B-F56493A8C933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728061FB-9703-46F4-838B-F56493A8C933}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
