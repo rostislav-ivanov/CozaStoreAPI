@@ -10,11 +10,14 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
 
         [Comment("First Name")]
         [MaxLength(FirstNameMaxLength)]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Comment("Last Name")]
         [MaxLength(LastNameMaxLength)]
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
+
+        [Comment("Navigation property to the product's Reviews")]
+        public List<Review> Reviews { get; set; } = [];
 
     }
 }
