@@ -8,11 +8,11 @@ namespace CozaStoreAPI.Infrastructure.Data.DataConfiguration
     {
         private readonly IEnumerable<Category> categories =
         [
-            new () { Id = 1, Name = "Women" },
-            new () { Id = 2, Name = "Man" },
-            new () { Id = 3, Name = "Shoes" },
-            new () { Id = 4, Name = "Watches" },
-            new () { Id = 5, Name = "Bag" },
+            new () { Id = 1, Name = "women" },
+            new () { Id = 2, Name = "man" },
+            new () { Id = 3, Name = "shoes" },
+            new () { Id = 4, Name = "watches" },
+            new () { Id = 5, Name = "bag" },
         ];
 
         public void Configure(EntityTypeBuilder<Category> builder)
