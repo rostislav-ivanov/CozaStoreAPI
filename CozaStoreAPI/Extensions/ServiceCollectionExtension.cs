@@ -1,4 +1,6 @@
-﻿using CozaStoreAPI.Infrastructure.Data;
+﻿using CozaStoreAPI.Core.Contracts;
+using CozaStoreAPI.Core.Services;
+using CozaStoreAPI.Infrastructure.Data;
 using CozaStoreAPI.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
+            services.AddScoped<IProductsService, ProductsService>();
+
             return services;
         }
 
@@ -37,6 +41,23 @@ namespace Microsoft.Extensions.DependencyInjection
             })
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173") // React frontend URL
+                               .AllowAnyHeader()
+                               .AllowAnyMethod()
+                               .AllowCredentials();
+                    });
+            });
 
             return services;
         }
