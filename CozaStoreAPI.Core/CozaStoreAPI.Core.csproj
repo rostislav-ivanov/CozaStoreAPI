@@ -6,14 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="ModelsDTO\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 	<ItemGroup>
-		<ProjectReference Include="..\CozaStoreAPI.Infrastructure\CozaStoreAPI.Infrastructure.csproj"  />
+		<ProjectReference Include="..\CozaStoreAPI.Infrastructure\CozaStoreAPI.Infrastructure.csproj" />
 	</ItemGroup>	
 
 </Project>
