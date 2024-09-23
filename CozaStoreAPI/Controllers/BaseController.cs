@@ -5,7 +5,7 @@ namespace CozaStoreAPI.Controllers
 {
     [Authorize]
     //[AutoValidateAntiforgeryToken]
-    public class BaseController : Controller
+    public class BaseController : ControllerBase
     {
     }
 }

@@ -2,6 +2,7 @@
 using CozaStoreAPI.Core.ModelsDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CozaStoreAPI.Controllers
 {
@@ -24,6 +25,8 @@ namespace CozaStoreAPI.Controllers
             [FromQuery] int offset,
             [FromQuery] int pageSize)
         {
+            var userId = User.GetUserId();
+
             var products = _productService.GetProductsQueryAsync(category, offset, pageSize).Result;
 
             return products;

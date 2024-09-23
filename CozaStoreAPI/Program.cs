@@ -1,7 +1,3 @@
-using CozaStoreAPI.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAppDbContext(builder.Configuration);
@@ -26,20 +22,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapIdentityApi<AppUser>();
-
-app.MapPost("/logout", async (SignInManager<AppUser> signInManager,
-    [FromBody] object empty) =>
-{
-    if (empty != null)
-    {
-        await signInManager.SignOutAsync();
-        return Results.Ok();
-    }
-    return Results.Unauthorized();
-})
-.RequireAuthorization();
 
 app.MapControllers();
 

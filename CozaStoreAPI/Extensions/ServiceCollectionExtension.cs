@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.AddPolicy("AllowSpecificOrigins",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173") // React frontend URL
+                        policy.WithOrigins("https://localhost:5173") // React frontend URL
                                .AllowAnyHeader()
                                .AllowAnyMethod()
                                .AllowCredentials();
