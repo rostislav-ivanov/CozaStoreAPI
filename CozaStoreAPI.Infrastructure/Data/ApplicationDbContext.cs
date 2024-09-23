@@ -21,6 +21,7 @@ namespace CozaStoreAPI.Infrastructure.Data
         public DbSet<ProductColor> ProductsColors { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Size> Sizes { get; set; } = null!;
+        public DbSet<WishUser> Wishes { get; set; } = null!;
 
 
 

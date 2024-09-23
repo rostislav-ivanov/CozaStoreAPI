@@ -9,5 +9,6 @@ namespace CozaStoreAPI.Core.Contracts
             string? category,
             int offset,
             int size);
+        Task<IEnumerable<ProductDTO>> GetProductsUserAsync(Guid userId);
     }
 }

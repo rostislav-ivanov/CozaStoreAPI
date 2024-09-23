@@ -17,6 +17,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//app.UseMiddleware<ValidateUserIdMiddleware>();
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 

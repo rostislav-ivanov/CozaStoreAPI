@@ -45,6 +45,9 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Comment("Navigation property to the product's Reviews")]
         public List<Review> Reviews { get; set; } = [];
 
+        [Comment("Navigation property to the Wishes Products")]
+        public List<WishUser> WishesUsers { get; set; } = [];
+
         [Comment("The product is deleted or not")]
         public bool IsDeleted { get; set; }
 

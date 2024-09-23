@@ -19,5 +19,8 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Comment("Navigation property to the product's Reviews")]
         public List<Review> Reviews { get; set; } = [];
 
+        [Comment("Navigation property to mapping table WishUser")]
+        List<WishUser> WishesUsers { get; set; } = [];
+
     }
 }

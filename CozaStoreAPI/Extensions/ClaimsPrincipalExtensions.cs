@@ -2,9 +2,9 @@
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
+        public static Guid GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.Parse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)

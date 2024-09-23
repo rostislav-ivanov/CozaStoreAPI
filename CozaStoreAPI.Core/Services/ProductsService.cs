@@ -41,5 +41,22 @@ namespace CozaStoreAPI.Core.Services
 
             return products;
         }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsUserAsync(Guid userId)
+        {
+            var products = await _context.Wishes
+                .Where(w => w.AppUserId == userId)
+                .Select(w => new ProductDTO
+                {
+                    Id = w.ProductId,
+                    Name = w.Product.Name,
+                    Price = w.Product.Price,
+                    Images = w.Product.Images.Select(im => im.ImagePath).ToList()
+                })
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products;
+        }
     }
 }
