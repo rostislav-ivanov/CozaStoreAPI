@@ -13,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IWishesService, WishesService>();
+            services.AddScoped<IProfileService, ProfileService>();
 
             return services;
         }

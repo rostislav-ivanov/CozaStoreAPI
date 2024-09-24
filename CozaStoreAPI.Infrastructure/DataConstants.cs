@@ -7,6 +7,8 @@
             public const int FirstNameMaxLength = 50;
             public const int LastNameMaxLength = 50;
             public const int EmailMaxLength = 100;
+            public const int ShippingCityMaxLength = 50;
+            public const int ShippingOfficeMaxLength = 200;
         }
 
         public static class Image

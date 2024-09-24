@@ -80,6 +80,18 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<string>("ShippingCity")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("User's shipping city");
+
+                    b.Property<string>("ShippingOffice")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("User's shipping office");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -101,9 +113,9 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4dd422f7-7002-435a-97d9-bb75f4887c22"),
+                            Id = new Guid("f9abd5a2-6215-479d-9e2c-d18cb27a912a"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7eefcfbb-6254-465f-9ce5-202d0a0c9f11",
+                            ConcurrencyStamp = "a69e6f97-15ad-4981-b3db-ad811bc5c19a",
                             Email = "test@test.com",
                             EmailConfirmed = true,
                             FirstName = "TestFirstName",
@@ -111,8 +123,10 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@TEST.COM",
                             NormalizedUserName = "TEST@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFE8FI4oNsztNFkUdqWIzSADxYivig3gkwWD226dK0Z9P/FIbZHOiXlzj8cRpj9FBQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELexmPuGGNE7bYgYxT0SO/oxRFmDg7qP7F2BeP2eOdl4UdNtq5ppc5YzHrz18udC8Q==",
                             PhoneNumberConfirmed = false,
+                            ShippingCity = "",
+                            ShippingOffice = "",
                             TwoFactorEnabled = false,
                             UserName = "test@test.com"
                         });
@@ -456,193 +470,193 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8009), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8868), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Esprit Ruffle Shirt",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Esprit Ruffle Shirt",
                             Price = 16.64m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8066), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8930), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8071), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8935), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Herschel supply",
                             Price = 35.31m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8073), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8938), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8077), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8943), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Only Check Trouser",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Only Check Trouser",
                             Price = 25.50m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8079), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8945), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8083), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8949), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Classic Trench Coat",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Classic Trench Coat",
                             Price = 75.00m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8085), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8952), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 5,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8089), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8956), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Front Pocket Jumper",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Front Pocket Jumper",
                             Price = 34.75m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8091), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8959), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 6,
                             CategoryId = 4,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8095), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8963), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Vintage Inspired Classic",
                             IsDeleted = false,
                             Material = "",
                             Name = "Vintage Inspired Classic",
                             Price = 93.20m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8098), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8965), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 7,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8102), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8971), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Shirt in Stretch Cotton",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Shirt in Stretch Cotton",
                             Price = 52.66m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8104), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8973), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 8,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8108), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8977), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Pieces Metallic Printed",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Pieces Metallic Printed",
                             Price = 18.96m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8111), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8980), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 9,
                             CategoryId = 3,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8115), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8984), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Converse All Star Hi Plimsolls",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Converse All Star Hi Plimsolls",
                             Price = 75.00m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8117), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8986), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 10,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8132), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8991), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Femme T-Shirt In Stripe",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Femme T-Shirt In Stripe",
                             Price = 25.85m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8134), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8993), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 11,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8138), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(8998), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Herschel supply",
                             Price = 63.16m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8140), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9000), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 12,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8144), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9004), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "100% leather",
                             Name = "Herschel supply",
                             Price = 63.15m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8146), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9007), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 13,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8150), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9011), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product T-Shirt with Sleeve",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "T-Shirt with Sleeve",
                             Price = 18.49m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8152), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9014), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 14,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8156), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9018), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Pretty Little Thing",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Pretty Little Thing",
                             Price = 54.79m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8159), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9021), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 15,
                             CategoryId = 4,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8163), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9025), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Mini Silver Mesh Watch",
                             IsDeleted = false,
                             Material = "",
                             Name = "Mini Silver Mesh Watch",
                             Price = 86.85m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8165), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9027), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 16,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8169), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9032), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Square Neck Back",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Square Neck Back",
                             Price = 29.64m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 23, 15, 16, 29, 299, DateTimeKind.Unspecified).AddTicks(8171), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 24, 10, 23, 10, 188, DateTimeKind.Unspecified).AddTicks(9034), new TimeSpan(0, 3, 0, 0, 0))
                         });
                 });
 
