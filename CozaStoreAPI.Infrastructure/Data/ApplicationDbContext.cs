@@ -22,6 +22,9 @@ namespace CozaStoreAPI.Infrastructure.Data
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Size> Sizes { get; set; } = null!;
         public DbSet<WishUser> Wishes { get; set; } = null!;
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Subscribe> Subscribes { get; set; }
+
 
 
 

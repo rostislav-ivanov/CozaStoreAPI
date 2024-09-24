@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
 
 namespace CozaStoreAPI.Middleware
 {
@@ -13,37 +13,27 @@ namespace CozaStoreAPI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var endpoint = context.GetEndpoint();
-            var allowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>();
+            var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (allowAnonymous != null)
+            if (!string.IsNullOrEmpty(userId))
             {
-                await _next(context);
+                if (Guid.TryParse(userId, out _))
+                {
+                    await _next(context);
+                }
+                else
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("Invalid user ID format.");
+                    return;
+                }
+            }
+            else
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsync("User ID is missing.");
                 return;
             }
-
-            //var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            //if (!string.IsNullOrEmpty(userId))
-            //{
-            //    if (Guid.TryParse(userId, out _))
-            //    {
-            //        await _next(context);
-            //    }
-            //    else
-            //    {
-            //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            //        await context.Response.WriteAsync("Invalid user ID format.");
-            //        return;
-            //    }
-            //}
-            //else
-            //{
-            //    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            //    await context.Response.WriteAsync("User ID is missing.");
-            //    return;
-            //}
-            await _next(context);
         }
     }
 

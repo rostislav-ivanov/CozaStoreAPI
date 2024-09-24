@@ -17,12 +17,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseMiddleware<ValidateUserIdMiddleware>();
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseMiddleware<ValidateUserIdMiddleware>();
 
 app.MapControllers();
 

@@ -23,5 +23,14 @@
             public const int RatingMinValue = 1;
             public const int RatingMaxValue = 5;
         }
+
+        public static class Message
+        {
+            public const int FirstNameMaxLength = 50;
+            public const int LastNameMaxLength = 50;
+            public const int EmailMaxLength = 100;
+            public const int SubjectMaxLength = 200;
+            public const int ContentMaxLength = 1000;
+        }
     }
 }
