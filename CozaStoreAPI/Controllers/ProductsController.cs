@@ -17,10 +17,10 @@ namespace CozaStoreAPI.Controllers
             _productService = productService;
         }
 
-        // GET: api/<ProductsController>
+        // GET: api/products
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> Get(
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts(
             [FromQuery] string? category,
             [FromQuery] int offset,
             [FromQuery] int pageSize)
@@ -35,11 +35,10 @@ namespace CozaStoreAPI.Controllers
             return Ok(products);
         }
 
-        // GET: api/<ProductsController>
-        [HttpGet]
+        // GET: api/products/count
+        [HttpGet("count")]
         [AllowAnonymous]
-        [Route("Count")]
-        public async Task<ActionResult<int>> Get([FromQuery] string? category)
+        public async Task<ActionResult<int>> GetProductCount([FromQuery] string? category)
         {
 
             int productsCount = await _productService.GetProductsCountAsync(category);
@@ -47,10 +46,39 @@ namespace CozaStoreAPI.Controllers
             return Ok(productsCount);
         }
 
-        // GET: api/<ProductsController>
-        [HttpGet]
-        [Route("User")]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
+        // GET: api/products/{id}/quick
+        [HttpGet("{id}/quick")]
+        [AllowAnonymous]
+        public async Task<ActionResult<QuickProductDTO>> GetQuickViewProduct(int id)
+        {
+            QuickProductDTO? product = await _productService.GetQuickProductAsync(id);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
+        }
+
+        // GET: api/products/{id}
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductDetailsDTO>> GetProductDetails(int id)
+        {
+            ProductDetailsDTO? product = await _productService.GetProductDetailsAsync(id);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
+        }
+
+        // GET: api/products/user
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllUserProducts()
         {
             Guid userId = User.GetUserId();
 
@@ -62,31 +90,6 @@ namespace CozaStoreAPI.Controllers
             }
 
             return Ok(products);
-        }
-
-        // GET api/<ProductsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ProductsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ProductsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ProductsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

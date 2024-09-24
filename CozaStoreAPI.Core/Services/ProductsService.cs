@@ -32,7 +32,7 @@ namespace CozaStoreAPI.Core.Services
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    Images = p.Images.Select(im => im.ImagePath).ToList()
+                    Image = p.Images.Select(im => im.ImagePath).FirstOrDefault() ?? string.Empty
                 })
                 .Skip(offset)
                 .Take(size)
@@ -51,12 +51,57 @@ namespace CozaStoreAPI.Core.Services
                     Id = w.ProductId,
                     Name = w.Product.Name,
                     Price = w.Product.Price,
-                    Images = w.Product.Images.Select(im => im.ImagePath).ToList()
+                    Image = w.Product.Images
+                        .OrderBy(im => im.ImageOrder)
+                        .Select(im => im.ImagePath)
+                        .FirstOrDefault() ?? string.Empty
                 })
                 .AsNoTracking()
                 .ToListAsync();
 
             return products;
         }
+
+        public Task<QuickProductDTO?> GetQuickProductAsync(int id)
+        {
+            var product = _context.Products
+                .Where(p => p.Id == id)
+                .Select(p => new QuickProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Images = p.Images.Select(im => im.ImagePath),
+                    Sizes = p.Sizes.Select(s => s.Size.Name),
+                    Colors = p.Colors.Select(c => c.Color.Name),
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return product;
+        }
+
+
+        public Task<ProductDetailsDTO?> GetProductDetailsAsync(int id)
+        {
+            var product = _context.Products
+                .Where(p => p.Id == id)
+                .Select(p => new ProductDetailsDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Images = p.Images.Select(im => im.ImagePath),
+                    Price = p.Price,
+                    Sizes = p.Sizes.Select(s => s.Size.Name),
+                    Colors = p.Colors.Select(c => c.Color.Name),
+                    Description = p.Description,
+                    Material = p.Material
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return product;
+        }
+
     }
 }
