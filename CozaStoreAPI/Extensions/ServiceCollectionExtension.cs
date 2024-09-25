@@ -15,6 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IWishesService, WishesService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IContactsService, ContactsService>();
+            services.AddScoped<IEcontService, EcontService>();
+            services.AddScoped<IShippingProviderService, ShippingProviderService>();
 
             return services;
         }

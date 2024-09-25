@@ -24,11 +24,8 @@ namespace CozaStoreAPI.Infrastructure.Data
         public DbSet<WishUser> Wishes { get; set; } = null!;
         public DbSet<Message> Messages { get; set; }
         public DbSet<Subscribe> Subscribes { get; set; }
-
-
-
-
-
+        public DbSet<EcontCity> EcontCities { get; set; }
+        public DbSet<EcontOffice> EcontOffices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

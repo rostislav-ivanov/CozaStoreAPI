@@ -19,6 +19,7 @@ namespace CozaStoreAPI.Infrastructure.Data.DataConfiguration
                 EmailConfirmed = true,
                 FirstName = "TestFirstName",
                 LastName = "TestLastName",
+                SecurityStamp = "NNC2KI3MK4ONPNJIS5HUOKHN3565MBID"
             },
         };
 

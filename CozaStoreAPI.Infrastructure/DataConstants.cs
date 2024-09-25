@@ -32,5 +32,15 @@
             public const int SubjectMaxLength = 200;
             public const int ContentMaxLength = 1000;
         }
+
+        public static class City
+        {
+            public const int NameMaxLength = 100;
+        }
+
+        public static class Office
+        {
+            public const int NameMaxLength = 300;
+        }
     }
 }
