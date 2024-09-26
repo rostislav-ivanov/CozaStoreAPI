@@ -26,6 +26,10 @@ namespace CozaStoreAPI.Infrastructure.Data
         public DbSet<Subscribe> Subscribes { get; set; }
         public DbSet<EcontCity> EcontCities { get; set; }
         public DbSet<EcontOffice> EcontOffices { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<ProductOrder> ProductsOrders { get; set; }
+        public DbSet<StatusOrder> StatusOrders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,6 +41,7 @@ namespace CozaStoreAPI.Infrastructure.Data
             builder.ApplyConfiguration(new ProductsConfiguration());
             builder.ApplyConfiguration(new ProductsSizesConfiguration());
             builder.ApplyConfiguration(new ProductsColorsConfiguration());
+            builder.ApplyConfiguration(new StatusOrdersConfiguration());
 
 
             base.OnModelCreating(builder);

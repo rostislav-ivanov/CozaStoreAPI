@@ -131,6 +131,20 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 comment: "The size of the product");
 
             migrationBuilder.CreateTable(
+                name: "StatusOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false, comment: "Primary key")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name of the status")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatusOrders", x => x.Id);
+                },
+                comment: "Status of the order");
+
+            migrationBuilder.CreateTable(
                 name: "Subscribes",
                 columns: table => new
                 {
@@ -296,6 +310,45 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 comment: "Table of shipping cities");
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false, comment: "Order Id")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false, comment: "App User Id"),
+                    OrderNumber = table.Column<string>(type: "text", nullable: false, comment: "Order Number"),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, comment: "Date of Order Creating"),
+                    StatusOrderId = table.Column<int>(type: "integer", nullable: false, comment: "Status of Order"),
+                    DateShipping = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, comment: "Date of Shipping Creating"),
+                    TrackingNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true, comment: "Tracking Number of Order"),
+                    IsPaid = table.Column<bool>(type: "boolean", nullable: false, comment: "Is Paid Order"),
+                    ShippingPrice = table.Column<decimal>(type: "numeric(18,2)", nullable: false, comment: "Shipping Price"),
+                    TotalPrice = table.Column<decimal>(type: "numeric(18,2)", nullable: false, comment: "Total Price"),
+                    FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, comment: "First Name Recipient"),
+                    LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, comment: "Last Name Recipient"),
+                    PhoneNumber = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false, comment: "Phone Number Recipient"),
+                    ShippingProvider = table.Column<string>(type: "text", nullable: true, comment: "Shipping Provider"),
+                    ShippingCity = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, comment: "City Recipient"),
+                    ShippingOffice = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true, comment: "Office Recipient")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_StatusOrders_StatusOrderId",
+                        column: x => x.StatusOrderId,
+                        principalTable: "StatusOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImageProducts",
                 columns: table => new
                 {
@@ -424,6 +477,36 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 comment: "This table contains the products that the user has added to his wish list");
 
             migrationBuilder.CreateTable(
+                name: "ProductsOrders",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    OrderId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false, comment: "The quantity of the product in the order"),
+                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false, comment: "The price of the product at the time of the order"),
+                    ImagePath = table.Column<string>(type: "text", nullable: true, comment: "The image path of the product at the time of the order"),
+                    Size = table.Column<string>(type: "text", nullable: true, comment: "The size of the product at the time of the order"),
+                    Color = table.Column<string>(type: "text", nullable: true, comment: "The color of the product at the time of the order")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductsOrders", x => new { x.ProductId, x.OrderId });
+                    table.ForeignKey(
+                        name: "FK_ProductsOrders_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductsOrders_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Many to many relation between products and orders");
+
+            migrationBuilder.CreateTable(
                 name: "ImageReviews",
                 columns: table => new
                 {
@@ -447,7 +530,7 @@ namespace CozaStoreAPI.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "ShippingCity", "ShippingOffice", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("910d3bff-2bc7-4613-8c2d-87335c0c5c07"), 0, "76366937-1dc9-4446-b8ee-0f8ac16fdae4", "test@test.com", true, "TestFirstName", "TestLastName", false, null, "TEST@TEST.COM", "TEST@TEST.COM", "AQAAAAIAAYagAAAAEPp9uY1L77bPS+YWNV20kVpC7EP+kXb38em7qQxDntNZ3XAxYXeA+z9DHGvMktZM0A==", null, false, "NNC2KI3MK4ONPNJIS5HUOKHN3565MBID", "", "", false, "test@test.com" });
+                values: new object[] { new Guid("124f4ef2-b14c-443e-99a3-3fc848425c13"), 0, "6fd49a1e-0e87-491d-aacb-99dd1af63b66", "test@test.com", true, "TestFirstName", "TestLastName", false, null, "TEST@TEST.COM", "TEST@TEST.COM", "AQAAAAIAAYagAAAAEP7QKRNFZvHKnvhawk/NiVBI8DeaQOX93XoQJ1Xm6XkFBSWsrMPl/x6HCcQWim867Q==", "0888 888 888", false, "NNC2KI3MK4ONPNJIS5HUOKHN3565MBID", "", "", false, "test@test.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -495,26 +578,38 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "StatusOrders",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Неизпълнена" },
+                    { 2, "Отменена" },
+                    { 3, "Изпълнена" },
+                    { 4, "Получена" },
+                    { 5, "Върната" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CategoryId", "CreatedAt", "Description", "IsDeleted", "Material", "Name", "Price", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4875), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Esprit Ruffle Shirt", false, "60% cotton, 40% polyester", "Esprit Ruffle Shirt", 16.64m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4961), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 2, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4970), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "60% cotton, 40% polyester", "Herschel supply", 35.31m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4974), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 3, 2, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4979), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Only Check Trouser", false, "60% cotton, 40% polyester", "Only Check Trouser", 25.50m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4986), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 4, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4995), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Classic Trench Coat", false, "60% cotton, 40% polyester", "Classic Trench Coat", 75.00m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(4999), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 5, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5023), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Front Pocket Jumper", false, "60% cotton, 40% polyester", "Front Pocket Jumper", 34.75m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5025), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 6, 4, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5033), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Vintage Inspired Classic", false, "", "Vintage Inspired Classic", 93.20m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5036), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 7, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5042), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Shirt in Stretch Cotton", false, "60% cotton, 40% polyester", "Shirt in Stretch Cotton", 52.66m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5045), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 8, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5049), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Pieces Metallic Printed", false, "60% cotton, 40% polyester", "Pieces Metallic Printed", 18.96m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5066), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 9, 3, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5071), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Converse All Star Hi Plimsolls", false, "60% cotton, 40% polyester", "Converse All Star Hi Plimsolls", 75.00m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5074), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 10, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5081), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Femme T-Shirt In Stripe", false, "60% cotton, 40% polyester", "Femme T-Shirt In Stripe", 25.85m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5083), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 11, 2, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5088), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "60% cotton, 40% polyester", "Herschel supply", 63.16m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5091), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 12, 2, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5096), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "100% leather", "Herschel supply", 63.15m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5098), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 13, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5103), new TimeSpan(0, 3, 0, 0, 0)), "Description of product T-Shirt with Sleeve", false, "60% cotton, 40% polyester", "T-Shirt with Sleeve", 18.49m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5106), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 14, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5111), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Pretty Little Thing", false, "60% cotton, 40% polyester", "Pretty Little Thing", 54.79m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5113), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 15, 4, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5118), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Mini Silver Mesh Watch", false, "", "Mini Silver Mesh Watch", 86.85m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5127), new TimeSpan(0, 3, 0, 0, 0)) },
-                    { 16, 1, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5183), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Square Neck Back", false, "60% cotton, 40% polyester", "Square Neck Back", 29.64m, new DateTimeOffset(new DateTime(2024, 9, 25, 15, 42, 35, 777, DateTimeKind.Unspecified).AddTicks(5186), new TimeSpan(0, 3, 0, 0, 0)) }
+                    { 1, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4372), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Esprit Ruffle Shirt", false, "60% cotton, 40% polyester", "Esprit Ruffle Shirt", 16.64m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4435), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 2, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4441), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "60% cotton, 40% polyester", "Herschel supply", 35.31m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4443), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 3, 2, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4447), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Only Check Trouser", false, "60% cotton, 40% polyester", "Only Check Trouser", 25.50m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4449), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 4, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4454), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Classic Trench Coat", false, "60% cotton, 40% polyester", "Classic Trench Coat", 75.00m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4456), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 5, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4460), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Front Pocket Jumper", false, "60% cotton, 40% polyester", "Front Pocket Jumper", 34.75m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4462), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 6, 4, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4467), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Vintage Inspired Classic", false, "", "Vintage Inspired Classic", 93.20m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4469), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 7, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4474), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Shirt in Stretch Cotton", false, "60% cotton, 40% polyester", "Shirt in Stretch Cotton", 52.66m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4476), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 8, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4480), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Pieces Metallic Printed", false, "60% cotton, 40% polyester", "Pieces Metallic Printed", 18.96m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4482), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 9, 3, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4486), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Converse All Star Hi Plimsolls", false, "60% cotton, 40% polyester", "Converse All Star Hi Plimsolls", 75.00m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4488), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 10, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4492), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Femme T-Shirt In Stripe", false, "60% cotton, 40% polyester", "Femme T-Shirt In Stripe", 25.85m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4494), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 11, 2, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4498), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "60% cotton, 40% polyester", "Herschel supply", 63.16m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4500), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 12, 2, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4505), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Herschel supply", false, "100% leather", "Herschel supply", 63.15m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4507), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 13, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4511), new TimeSpan(0, 3, 0, 0, 0)), "Description of product T-Shirt with Sleeve", false, "60% cotton, 40% polyester", "T-Shirt with Sleeve", 18.49m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4514), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 14, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4518), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Pretty Little Thing", false, "60% cotton, 40% polyester", "Pretty Little Thing", 54.79m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4520), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 15, 4, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4524), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Mini Silver Mesh Watch", false, "", "Mini Silver Mesh Watch", 86.85m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4526), new TimeSpan(0, 3, 0, 0, 0)) },
+                    { 16, 1, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4531), new TimeSpan(0, 3, 0, 0, 0)), "Description of product Square Neck Back", false, "60% cotton, 40% polyester", "Square Neck Back", 29.64m, new DateTimeOffset(new DateTime(2024, 9, 26, 8, 26, 22, 779, DateTimeKind.Unspecified).AddTicks(4533), new TimeSpan(0, 3, 0, 0, 0)) }
                 });
 
             migrationBuilder.InsertData(
@@ -743,6 +838,16 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 column: "ReviewId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_AppUserId",
+                table: "Orders",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_StatusOrderId",
+                table: "Orders",
+                column: "StatusOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -751,6 +856,11 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 name: "IX_ProductsColors_ColorId",
                 table: "ProductsColors",
                 column: "ColorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductsOrders_OrderId",
+                table: "ProductsOrders",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductsSizes_SizeId",
@@ -807,6 +917,9 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 name: "ProductsColors");
 
             migrationBuilder.DropTable(
+                name: "ProductsOrders");
+
+            migrationBuilder.DropTable(
                 name: "ProductsSizes");
 
             migrationBuilder.DropTable(
@@ -828,13 +941,19 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                 name: "Colors");
 
             migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
                 name: "Sizes");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "StatusOrders");
 
             migrationBuilder.DropTable(
                 name: "Categories");

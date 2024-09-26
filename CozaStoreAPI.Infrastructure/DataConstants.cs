@@ -42,5 +42,20 @@
         {
             public const int NameMaxLength = 300;
         }
+
+        public static class Order
+        {
+            public const int TrackingNumberMaxLength = 30;
+            public const string TrackingNumberPattern = @"^[A-Za-z0-9]{5,}$";
+            public const int FirstNameMaxLength = 100;
+            public const int LastNameMaxLength = 100;
+            public const int PhoneNumberMaxLength = 50;
+        }
+
+        public static class StatusOrder
+        {
+            public const int NameMinLength = 1;
+            public const int NameMaxLength = 100;
+        }
     }
 }

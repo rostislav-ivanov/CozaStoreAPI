@@ -30,5 +30,8 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Comment("Navigation property to mapping table WishUser")]
         List<WishUser> WishesUsers { get; set; } = [];
 
+        [Comment("Navigation property to the user's Orders")]
+        public List<Order> Orders { get; set; } = [];
+
     }
 }
