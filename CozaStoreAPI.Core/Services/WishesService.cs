@@ -41,11 +41,19 @@ namespace CozaStoreAPI.Core.Services
 
                 _context.Wishes.RemoveRange(userWishes);
 
-                var newWishes = wishes.Select(w => new WishUser
-                {
-                    AppUserId = user.Id,
-                    ProductId = w
-                });
+                var productIds = await _context.Products
+                    .Where(p => wishes.Contains(p.Id))
+                    .Select(p => p.Id)
+                    .ToListAsync();
+
+                var newWishes = wishes
+                    .Distinct()
+                    .Where(w => productIds.Contains(w))
+                    .Select(w => new WishUser
+                    {
+                        AppUserId = user.Id,
+                        ProductId = w
+                    });
 
                 await _context.Wishes.AddRangeAsync(newWishes);
 
