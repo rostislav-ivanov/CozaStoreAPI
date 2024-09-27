@@ -11,21 +11,29 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Key]
         public int Id { get; set; }
 
+
         [Comment("The product's name")]
+        [MaxLength(DataConstants.Product.NameMaxLength)]
         public string Name { get; set; } = string.Empty;
+
 
         [Comment("Navigation Property to product's images")]
         public List<ImageProduct> Images { get; set; } = [];
 
+
         [Comment("The product's description")]
+        [MaxLength(DataConstants.Product.DescriptionMaxLength)]
         public string Description { get; set; } = string.Empty;
+
 
         [Comment("The product's price")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
+
         [Comment("The product's category id")]
         public int? CategoryId { get; set; }
+
 
         [Comment("Navigation Property to product's category")]
         [ForeignKey(nameof(CategoryId))]
@@ -39,20 +47,27 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Comment("Navigation Property to product's colors")]
         public List<ProductColor> Colors { get; set; } = [];
 
+
         [Comment("The product's material")]
+        [MaxLength(DataConstants.Product.MaterialMaxLength)]
         public string Material { get; set; } = string.Empty;
+
 
         [Comment("Navigation property to the product's Reviews")]
         public List<Review> Reviews { get; set; } = [];
 
+
         [Comment("Navigation property to the Wishes Products")]
         public List<WishUser> WishesUsers { get; set; } = [];
+
 
         [Comment("The product is deleted or not")]
         public bool IsDeleted { get; set; }
 
+
         [Comment("The product's created date")]
         public DateTimeOffset CreatedAt { get; set; }
+
 
         [Comment("The product's updated date")]
         public DateTimeOffset UpdatedAt { get; set; }

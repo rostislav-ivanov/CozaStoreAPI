@@ -5,15 +5,15 @@ using System.Security.Claims;
 
 namespace CozaStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrdersController : BaseController
+    public class OrdersController : BaseApiController
     {
         private readonly IOrdersService _ordersService;
+        private readonly ILogger<OrdersController> _logger;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IOrdersService ordersService, ILogger<OrdersController> logger)
         {
             _ordersService = ordersService;
+            _logger = logger;
         }
 
         // GET api/orders
@@ -22,14 +22,26 @@ namespace CozaStoreAPI.Controllers
         {
             Guid userId = User.GetUserId();
 
-            var orders = await _ordersService.GetOrdersAsync(userId);
-
-            return Ok(orders);
+            try
+            {
+                var orders = await _ordersService.GetOrdersAsync(userId);
+                return Ok(orders);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving orders for user {UserId}", userId);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving orders for user {UserId}", userId);
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
 
         // POST api/orders
         [HttpPost]
-        public async Task<ActionResult<string>> CreateOrder([FromBody] OrderDTO order)
+        public async Task<ActionResult<string>> CreateOrder(OrderDTO order)
         {
             Guid userId = User.GetUserId();
 
@@ -41,10 +53,12 @@ namespace CozaStoreAPI.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(ex, "Invalid argument when creating order for user {UserId}", userId);
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating order for user {UserId}", userId);
                 return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
             }
         }

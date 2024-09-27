@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CozaStoreAPI.Infrastructure.Data.Models
@@ -25,13 +26,15 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         public decimal Price { get; set; }
 
         [Comment("The image path of the product at the time of the order")]
+        [MaxLength(DataConstants.Image.ImagePathMaxLength)]
         public string? ImagePath { get; set; } = string.Empty;
 
         [Comment("The size of the product at the time of the order")]
+        [MaxLength(DataConstants.Size.NameMaxLength)]
         public string? Size { get; set; } = string.Empty;
 
         [Comment("The color of the product at the time of the order")]
-
+        [MaxLength(DataConstants.Color.NameMaxLength)]
         public string? Color { get; set; } = string.Empty;
     }
 }

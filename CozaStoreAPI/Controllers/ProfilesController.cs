@@ -5,45 +5,72 @@ using System.Security.Claims;
 
 namespace CozaStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProfilesController : BaseController
+    public class ProfilesController : BaseApiController
     {
         private readonly IProfileService _profileService;
+        private readonly ILogger<ProfilesController> _logger;
 
-        public ProfilesController(IProfileService profileService)
+        public ProfilesController(IProfileService profileService, ILogger<ProfilesController> logger)
         {
             _profileService = profileService;
+            _logger = logger;
         }
 
         // GET: api/profiles
         [HttpGet]
         public async Task<ActionResult<ProfileDTO>> GetProfile()
         {
-            Guid userId = User.GetUserId();
-            ProfileDTO? profile = await _profileService.GetProfileAsync(userId);
-
-            if (profile is null)
+            try
             {
-                return NotFound();
-            }
+                Guid userId = User.GetUserId();
+                ProfileDTO? profile = await _profileService.GetProfileAsync(userId);
 
-            return Ok(profile);
+                if (profile is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(profile);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving profile");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving profile");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
 
         // PUT: api/profiles
         [HttpPut]
-        public async Task<ActionResult<ProfileDTO>> UpdateProfile([FromBody] ProfileDTO profile)
+        public async Task<ActionResult<ProfileDTO>> UpdateProfile(ProfileDTO profile)
         {
-            Guid userId = User.GetUserId();
-            ProfileDTO? updatedProfile = await _profileService.UpdateProfileAsync(userId, profile);
-
-            if (updatedProfile is null)
+            try
             {
-                return NotFound();
-            }
+                Guid userId = User.GetUserId();
 
-            return Ok(updatedProfile);
+                var updatedProfile = await _profileService.UpdateProfileAsync(userId, profile);
+
+                if (updatedProfile is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedProfile);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when updating profile");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating profile");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
     }
 }

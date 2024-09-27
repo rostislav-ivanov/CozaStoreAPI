@@ -5,21 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CozaStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ContactsController : BaseController
+    public class ContactsController : BaseApiController
     {
         private readonly IContactsService _contactsService;
+        private readonly ILogger<ContactsController> _logger;
 
-        public ContactsController(IContactsService contactsService)
+        public ContactsController(IContactsService contactsService, ILogger<ContactsController> logger)
         {
             _contactsService = contactsService;
+            _logger = logger;
         }
 
         // POST api/contacts/messages
         [HttpPost("messages")]
         [AllowAnonymous]
-        public async Task<ActionResult<MessageDTO>> SendMessage([FromBody] MessageDTO messageDTO)
+        public async Task<ActionResult<MessageDTO>> SendMessage(MessageDTO messageDTO)
         {
             try
             {
@@ -29,10 +29,12 @@ namespace CozaStoreAPI.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(ex, "Invalid argument when sending message");
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error sending message");
                 return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
             }
         }
@@ -40,7 +42,7 @@ namespace CozaStoreAPI.Controllers
         // POST api/contacts/subscribers
         [HttpPost("subscribers")]
         [AllowAnonymous]
-        public async Task<ActionResult<MessageDTO>> Subscribe([FromBody] EmailDTO email)
+        public async Task<ActionResult<MessageDTO>> Subscribe(EmailDTO email)
         {
             try
             {
@@ -50,10 +52,12 @@ namespace CozaStoreAPI.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(ex, "Invalid argument when subscribing");
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error subscribing");
                 return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
             }
         }

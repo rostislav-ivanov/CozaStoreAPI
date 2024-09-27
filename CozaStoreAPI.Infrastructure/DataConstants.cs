@@ -11,9 +11,26 @@
             public const int ShippingOfficeMaxLength = 200;
         }
 
+        public static class Product
+        {
+            public const int NameMaxLength = 100;
+            public const int DescriptionMaxLength = 2000;
+            public const int MaterialMaxLength = 200;
+        }
+
         public static class Image
         {
-            public const int ImagePathMaxLength = 2048;
+            public const int ImagePathMaxLength = 300;
+        }
+
+        public static class Size
+        {
+            public const int NameMaxLength = 100;
+        }
+
+        public static class Color
+        {
+            public const int NameMaxLength = 100;
         }
 
         public static class Review
@@ -47,15 +64,29 @@
         {
             public const int TrackingNumberMaxLength = 30;
             public const string TrackingNumberPattern = @"^[A-Za-z0-9]{5,}$";
-            public const int FirstNameMaxLength = 100;
-            public const int LastNameMaxLength = 100;
-            public const int PhoneNumberMaxLength = 50;
+            public const int PhoneNumberMaxLength = 20;
         }
 
         public static class StatusOrder
         {
             public const int NameMinLength = 1;
             public const int NameMaxLength = 100;
+        }
+
+        public const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+        public const string PhonePattern = @"^\+?[0-9\s]*$";
+
+        public static class ErrorMessageConstants
+        {
+            public const string RequiredField = "The {0} field is required.";
+            public const string StringLengthMax = "The {0} must be at most {1} characters long.";
+            public const string EmptyList = "The {0} list cannot be empty.";
+            public const string LeastOneEntity = "At least one entity must be provided.";
+            public const string NegativOrZeroNumber = "The {0} must be a positive number.";
+            public const string NegativeDecimalVolue = "The {0} must be a positive number.";
+            public const string InvalidEmailAddress = "Invalid email address";
+            public const string InvalidPhoneNumber = "Invalid phone number. Only digits and '+' are allowed.";
         }
     }
 }

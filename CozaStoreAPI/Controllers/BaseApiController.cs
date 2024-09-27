@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CozaStoreAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     [Authorize]
     //[AutoValidateAntiforgeryToken]
-    public class BaseController : ControllerBase
+    public class BaseApiController : ControllerBase
     {
     }
 }

@@ -59,7 +59,7 @@ namespace CozaStoreAPI.Core.Services
                             EcontOffice econtOffice = new()
                             {
                                 Id = int.Parse(office.Id),
-                                Name = office.Name,
+                                Name = office.NameEn,
                                 CityId = office.Address.City.Id
                             };
                             econtOffices.Add(econtOffice);
@@ -68,11 +68,10 @@ namespace CozaStoreAPI.Core.Services
                                 EcontCity econtCity = new()
                                 {
                                     Id = office.Address.City.Id,
-                                    Name = office.Address.City.Name
+                                    Name = office.Address.City.NameEn
                                 };
                                 econtCities.Add(econtCity);
                             }
-                            Console.WriteLine($"GetEcontOfficesAsync called                         {econtOffice.Name}, {office.Address.City.Id}");
                         }
                     }
                     else
@@ -113,7 +112,7 @@ namespace CozaStoreAPI.Core.Services
         public class Office
         {
             public string Id { get; set; } = string.Empty;
-            public string Name { get; set; } = string.Empty;
+            public string NameEn { get; set; } = string.Empty;
 
             public AddressClass Address { get; set; } = new();
 
@@ -125,7 +124,7 @@ namespace CozaStoreAPI.Core.Services
                 {
                     public int Id { get; set; }
 
-                    public string Name { get; set; } = string.Empty;
+                    public string NameEn { get; set; } = string.Empty;
                 }
             }
         }

@@ -52,11 +52,11 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
 
-        [MaxLength(FirstNameMaxLength)]
+        [MaxLength(DataConstants.AppUser.FirstNameMaxLength)]
         [Comment("First Name Recipient")]
         public required string FirstName { get; set; }
 
-        [MaxLength(LastNameMaxLength)]
+        [MaxLength(DataConstants.AppUser.LastNameMaxLength)]
         [Comment("Last Name Recipient")]
         public required string LastName { get; set; }
 

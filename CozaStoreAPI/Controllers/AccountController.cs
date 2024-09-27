@@ -6,100 +6,111 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CozaStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : BaseController
+    public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         // POST: api/account/register
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterModelDTO model)
+        public async Task<IActionResult> Register(RegisterModelDTO model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // Create a new user with the provided email and password
-            var user = new AppUser { UserName = model.Email, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
+            try
             {
-                // Automatically log the user in after registration
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-                // Optionally: Set custom cookie after login
-                var userData = "{\"name\": \"" + user.UserName + "\", \"email\": \"" + user.Email + "\"}";
-                var cookieOptions = new CookieOptions
+                if (result.Succeeded)
                 {
-                    HttpOnly = true,
-                    Secure = true, // Set true for HTTPS
-                    SameSite = SameSiteMode.None,
-                    Expires = DateTime.Now.AddDays(7)
-                };
-                Response.Cookies.Append("UserData", userData, cookieOptions);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
 
-                return Ok(new { message = "Registration and automatic login successful" });
+                    var userData = "{\"name\": \"" + user.UserName + "\", \"email\": \"" + user.Email + "\"}";
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true, // Set true for HTTPS
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTime.Now.AddDays(7)
+                    };
+                    Response.Cookies.Append("UserData", userData, cookieOptions);
+
+                    return Ok(new { message = "Registration and automatic login successful" });
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return BadRequest(ModelState);
             }
-
-            foreach (var error in result.Errors)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                _logger.LogError(ex, "Error occurred during registration for user {Email}", model.Email);
+                return StatusCode(500, new { message = "An error occurred while processing your request" });
             }
-
-            return BadRequest(ModelState);
         }
-
 
         // POST: api/account/login
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginModelDTO model)
+        public async Task<IActionResult> Login(LoginModelDTO model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
+            try
             {
-                // Optionally: Set custom cookies after successful login
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                var userData = "{\"name\": \"" + user.UserName + "\", \"email\": \"" + user.Email + "\"}";
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
 
-                var cookieOptions = new CookieOptions
+                if (result.Succeeded)
                 {
-                    HttpOnly = true,
-                    Secure = true, // Set true for HTTPS
-                    SameSite = SameSiteMode.None, // Allows cross-origin requests
-                    Expires = DateTime.Now.AddDays(7)
-                };
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var userData = "{\"name\": \"" + user.UserName + "\", \"email\": \"" + user.Email + "\"}";
 
-                Response.Cookies.Append("UserData", userData, cookieOptions);
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTime.Now.AddDays(7)
+                    };
 
-                return Ok(new { message = "Login successful" });
+                    Response.Cookies.Append("UserData", userData, cookieOptions);
+
+                    return Ok(new { message = "Login successful" });
+                }
+
+                return Unauthorized(new { message = "Invalid login attempt" });
             }
-
-            return Unauthorized(new { message = "Invalid login attempt" });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during login for user {Email}", model.Email);
+                return StatusCode(500, new { message = "An error occurred while processing your request" });
+            }
         }
 
         // POST: api/account/logout
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-
-            Response.Cookies.Delete("UserData");
-
-            return Ok(new { message = "Logout successful" });
+            try
+            {
+                await _signInManager.SignOutAsync();
+                Response.Cookies.Delete("UserData");
+                return Ok(new { message = "Logout successful" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during logout");
+                return StatusCode(500, new { message = "An error occurred while processing your request" });
+            }
         }
     }
 }
