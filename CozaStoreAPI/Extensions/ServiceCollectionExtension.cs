@@ -1,4 +1,5 @@
-﻿using CozaStoreAPI.Core.Contracts;
+﻿using CozaStoreAPI.Common.ModelBinders;
+using CozaStoreAPI.Core.Contracts;
 using CozaStoreAPI.Core.Services;
 using CozaStoreAPI.Infrastructure.Data;
 using CozaStoreAPI.Infrastructure.Data.Models;
@@ -11,7 +12,19 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
+            services.AddControllers(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+            });
+
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IWishesService, WishesService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IContactsService, ContactsService>();
+            services.AddScoped<IEcontService, EcontService>();
+            services.AddScoped<IShippingProviderService, ShippingProviderService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddHttpClient();
 
             return services;
         }
@@ -52,7 +65,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.AddPolicy("AllowSpecificOrigins",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173") // React frontend URL
+                        policy.WithOrigins("https://localhost:5173") // React frontend URL
                                .AllowAnyHeader()
                                .AllowAnyMethod()
                                .AllowCredentials();

@@ -6,14 +6,18 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI", "CozaStoreAPI\CozaStoreAPI.csproj", "{DF346D1A-098C-4DF0-A731-7A744ED68D19}"
 	ProjectSection(ProjectDependencies) = postProject
 		{728061FB-9703-46F4-838B-F56493A8C933} = {728061FB-9703-46F4-838B-F56493A8C933}
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB} = {A6D3A60D-5277-47A5-8153-83BBA6C592CB}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI.Infrastructure", "CozaStoreAPI.Infrastructure\CozaStoreAPI.Infrastructure.csproj", "{F9544C16-A45D-4ECE-AC18-24DF5582C717}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CozaStoreAPI.Core", "CozaStoreAPI.Core\CozaStoreAPI.Core.csproj", "{728061FB-9703-46F4-838B-F56493A8C933}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB} = {A6D3A60D-5277-47A5-8153-83BBA6C592CB}
 		{F9544C16-A45D-4ECE-AC18-24DF5582C717} = {F9544C16-A45D-4ECE-AC18-24DF5582C717}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CozaStoreAPI.Common", "CozaStoreAPI.Common\CozaStoreAPI.Common.csproj", "{A6D3A60D-5277-47A5-8153-83BBA6C592CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{728061FB-9703-46F4-838B-F56493A8C933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728061FB-9703-46F4-838B-F56493A8C933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728061FB-9703-46F4-838B-F56493A8C933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6D3A60D-5277-47A5-8153-83BBA6C592CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

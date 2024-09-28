@@ -2,56 +2,155 @@
 using CozaStoreAPI.Core.ModelsDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CozaStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : BaseController
+    public class ProductsController : BaseApiController
     {
         private readonly IProductsService _productService;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IProductsService productService)
+        public ProductsController(IProductsService productService, ILogger<ProductsController> logger)
         {
             _productService = productService;
+            _logger = logger;
         }
 
-        // GET: api/<ProductsController>
+        // GET: api/products
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<ProductDTO> Get(
-            [FromQuery] string? category,
-            [FromQuery] int offset,
-            [FromQuery] int pageSize)
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts(string? category, int offset, int pageSize)
         {
-            var products = _productService.GetProductsQueryAsync(category, offset, pageSize).Result;
+            try
+            {
+                var products = await _productService.GetProductsQueryAsync(category, offset, pageSize);
 
-            return products;
+                if (products is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(products);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving products");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving products");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
 
-        // GET api/<ProductsController>/5
+        // GET: api/products/count
+        [HttpGet("count")]
+        [AllowAnonymous]
+        public async Task<ActionResult<int>> GetProductCount(string? category)
+        {
+            try
+            {
+                int productsCount = await _productService.GetProductsCountAsync(category);
+
+                return Ok(productsCount);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving products count");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving products count");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
+        }
+
+        // GET: api/products/{id}/quick
+        [HttpGet("{id}/quick")]
+        [AllowAnonymous]
+        public async Task<ActionResult<QuickProductDTO>> GetQuickViewProduct(int id)
+        {
+            try
+            {
+                QuickProductDTO? product = await _productService.GetQuickProductAsync(id);
+
+                if (product is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(product);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving quick product");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving quick product");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
+        }
+
+        // GET: api/products/{id}
         [HttpGet("{id}")]
-        public string Get(int id)
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductDetailsDTO>> GetProductDetails(int id)
         {
-            return "value";
+            try
+            {
+                ProductDetailsDTO? product = await _productService.GetProductDetailsAsync(id);
+
+                if (product is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(product);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving product details");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving product details");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
 
-        // POST api/<ProductsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        // GET: api/products/user
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllUserProducts()
         {
-        }
+            try
+            {
+                Guid userId = User.GetUserId();
 
-        // PUT api/<ProductsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+                var products = await _productService.GetProductsUserAsync(userId);
 
-        // DELETE api/<ProductsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                if (products is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(products);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid argument when retrieving user products");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving user products");
+                return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+            }
         }
     }
 }

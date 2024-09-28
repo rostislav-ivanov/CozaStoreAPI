@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CozaStoreAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240922125214_01")]
+    [Migration("20240926172557_01")]
     partial class _01
     {
         /// <inheritdoc />
@@ -83,6 +83,18 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<string>("ShippingCity")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("User's shipping city");
+
+                    b.Property<string>("ShippingOffice")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("User's shipping office");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -104,9 +116,9 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f7a2726e-3fd1-4053-b1b1-9183b2f32b50"),
+                            Id = new Guid("f415401c-db9c-4e89-bf5f-d75b7e1301fc"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5234652a-340a-431c-bf6d-5e4bf43f98e1",
+                            ConcurrencyStamp = "e00cde30-23dd-4d56-b6f7-2e551a6c02d1",
                             Email = "test@test.com",
                             EmailConfirmed = true,
                             FirstName = "TestFirstName",
@@ -114,8 +126,12 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@TEST.COM",
                             NormalizedUserName = "TEST@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENUI5qBtaZMAGzRQgZc99rHF1iUJGoaERS7AwV9ZxtXnJQDu9B4UydjN22mbh4I5Pw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIDV5z3uIpqH0mMSfGi6kA/r+myic+aN4lgo2MfqgLTrcQsA5TBzVMSxjDRRY6WitQ==",
+                            PhoneNumber = "0888 888 888",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "NNC2KI3MK4ONPNJIS5HUOKHN3565MBID",
+                            ShippingCity = "",
+                            ShippingOffice = "",
                             TwoFactorEnabled = false,
                             UserName = "test@test.com"
                         });
@@ -181,7 +197,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasComment("The color's name");
 
                     b.HasKey("Id");
@@ -219,6 +236,51 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.EcontCity", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasComment("Shipping city Id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Name of shipping city");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EcontCities", t =>
+                        {
+                            t.HasComment("Table of shipping cities");
+                        });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.EcontOffice", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasComment("Shipping office Id");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasComment("Name of office city");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("EcontOffices", t =>
+                        {
+                            t.HasComment("Table of shipping cities");
+                        });
+                });
+
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.ImageProduct", b =>
                 {
                     b.Property<int>("Id")
@@ -234,8 +296,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
                         .HasComment("The path of the image");
 
                     b.Property<int>("ProductId")
@@ -383,8 +445,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
                         .HasComment("The path of the image");
 
                     b.Property<int>("ReviewId")
@@ -399,6 +461,141 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         {
                             t.HasComment("The image of the review");
                         });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Primary key");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasComment("Content of the message");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Email of the user");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("First name of the user");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("Last name of the user");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("Subject of the message");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages", t =>
+                        {
+                            t.HasComment("Table of messages from users");
+                        });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Order Id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid")
+                        .HasComment("App User Id");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("timestamp with time zone")
+                        .HasComment("Date of Order Creating");
+
+                    b.Property<DateTimeOffset?>("DateShipping")
+                        .HasColumnType("timestamp with time zone")
+                        .HasComment("Date of Shipping Creating");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("First Name Recipient");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("boolean")
+                        .HasComment("Is Paid Order");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("Last Name Recipient");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Order Number");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasComment("Phone Number Recipient");
+
+                    b.Property<string>("ShippingCity")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("City Recipient");
+
+                    b.Property<string>("ShippingOffice")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasComment("Office Recipient");
+
+                    b.Property<decimal>("ShippingPrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("Shipping Price");
+
+                    b.Property<string>("ShippingProvider")
+                        .HasColumnType("text")
+                        .HasComment("Shipping Provider");
+
+                    b.Property<int>("StatusOrderId")
+                        .HasColumnType("integer")
+                        .HasComment("Status of Order");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("Total Price");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasComment("Tracking Number of Order");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("StatusOrderId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Product", b =>
@@ -420,7 +617,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasComment("The product's description");
 
                     b.Property<bool>("IsDeleted")
@@ -429,12 +627,14 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasComment("The product's material");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasComment("The product's name");
 
                     b.Property<decimal>("Price")
@@ -459,193 +659,193 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5089), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6660), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Esprit Ruffle Shirt",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Esprit Ruffle Shirt",
                             Price = 16.64m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5155), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6721), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5162), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6726), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Herschel supply",
                             Price = 35.31m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5164), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6728), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5168), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6733), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Only Check Trouser",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Only Check Trouser",
                             Price = 25.50m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5171), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6735), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5175), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6739), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Classic Trench Coat",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Classic Trench Coat",
                             Price = 75.00m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5178), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6741), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 5,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5182), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6746), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Front Pocket Jumper",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Front Pocket Jumper",
                             Price = 34.75m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5184), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6748), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 6,
                             CategoryId = 4,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5188), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6753), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Vintage Inspired Classic",
                             IsDeleted = false,
                             Material = "",
                             Name = "Vintage Inspired Classic",
                             Price = 93.20m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5190), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6755), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 7,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5194), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6759), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Shirt in Stretch Cotton",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Shirt in Stretch Cotton",
                             Price = 52.66m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5197), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6761), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 8,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5201), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6832), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Pieces Metallic Printed",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Pieces Metallic Printed",
                             Price = 18.96m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5203), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6834), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 9,
                             CategoryId = 3,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5207), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6839), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Converse All Star Hi Plimsolls",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Converse All Star Hi Plimsolls",
                             Price = 75.00m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5209), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6841), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 10,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5213), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6845), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Femme T-Shirt In Stripe",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Femme T-Shirt In Stripe",
                             Price = 25.85m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5216), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6847), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 11,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5220), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6851), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Herschel supply",
                             Price = 63.16m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5222), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6853), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 12,
                             CategoryId = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5226), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6857), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Herschel supply",
                             IsDeleted = false,
                             Material = "100% leather",
                             Name = "Herschel supply",
                             Price = 63.15m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5228), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6859), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 13,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5232), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6863), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product T-Shirt with Sleeve",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "T-Shirt with Sleeve",
                             Price = 18.49m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5234), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6865), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 14,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5352), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6869), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Pretty Little Thing",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Pretty Little Thing",
                             Price = 54.79m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5355), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6871), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 15,
                             CategoryId = 4,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5360), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6875), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Mini Silver Mesh Watch",
                             IsDeleted = false,
                             Material = "",
                             Name = "Mini Silver Mesh Watch",
                             Price = 86.85m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5362), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6877), new TimeSpan(0, 3, 0, 0, 0))
                         },
                         new
                         {
                             Id = 16,
                             CategoryId = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5367), new TimeSpan(0, 3, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6881), new TimeSpan(0, 3, 0, 0, 0)),
                             Description = "Description of product Square Neck Back",
                             IsDeleted = false,
                             Material = "60% cotton, 40% polyester",
                             Name = "Square Neck Back",
                             Price = 29.64m,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 22, 15, 52, 14, 183, DateTimeKind.Unspecified).AddTicks(5369), new TimeSpan(0, 3, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 9, 26, 20, 25, 56, 631, DateTimeKind.Unspecified).AddTicks(6883), new TimeSpan(0, 3, 0, 0, 0))
                         });
                 });
 
@@ -1003,6 +1203,47 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         {
                             ProductId = 16,
                             ColorId = 5
+                        });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.ProductOrder", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("The color of the product at the time of the order");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasComment("The image path of the product at the time of the order");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("The price of the product at the time of the order");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasComment("The quantity of the product in the order");
+
+                    b.Property<string>("Size")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("The size of the product at the time of the order");
+
+                    b.HasKey("ProductId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ProductsOrders", t =>
+                        {
+                            t.HasComment("Many to many relation between products and orders");
                         });
                 });
 
@@ -1428,7 +1669,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasComment("The size's name");
 
                     b.HasKey("Id");
@@ -1508,6 +1750,92 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         {
                             Id = 14,
                             Name = "100"
+                        });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.StatusOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Primary key");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name of the status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatusOrders", t =>
+                        {
+                            t.HasComment("Status of the order");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Неизпълнена"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Отменена"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Изпълнена"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Получена"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Върната"
+                        });
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Subscribe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subscribes");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.WishUser", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid")
+                        .HasComment("The user id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasComment("The product id");
+
+                    b.HasKey("AppUserId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Wishes", t =>
+                        {
+                            t.HasComment("This table contains the products that the user has added to his wish list");
                         });
                 });
 
@@ -1641,6 +1969,17 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.EcontOffice", b =>
+                {
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.EcontCity", "City")
+                        .WithMany("Offices")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.ImageProduct", b =>
                 {
                     b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.Product", "Product")
@@ -1661,6 +2000,25 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Order", b =>
+                {
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.AppUser", "AppUser")
+                        .WithMany("Orders")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.StatusOrder", "StatusOrder")
+                        .WithMany("Orders")
+                        .HasForeignKey("StatusOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("StatusOrder");
                 });
 
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Product", b =>
@@ -1687,6 +2045,25 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Color");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.ProductOrder", b =>
+                {
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.Order", "Order")
+                        .WithMany("ProductsOrders")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -1725,6 +2102,25 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.WishUser", b =>
+                {
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CozaStoreAPI.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany("WishesUsers")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Product");
                 });
@@ -1782,6 +2178,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.AppUser", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("Reviews");
                 });
 
@@ -1795,6 +2193,16 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.Navigation("ProductsColors");
                 });
 
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.EcontCity", b =>
+                {
+                    b.Navigation("Offices");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Order", b =>
+                {
+                    b.Navigation("ProductsOrders");
+                });
+
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Product", b =>
                 {
                     b.Navigation("Colors");
@@ -1804,6 +2212,8 @@ namespace CozaStoreAPI.Infrastructure.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Sizes");
+
+                    b.Navigation("WishesUsers");
                 });
 
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Review", b =>
@@ -1814,6 +2224,11 @@ namespace CozaStoreAPI.Infrastructure.Migrations
             modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.Size", b =>
                 {
                     b.Navigation("ProductsSizes");
+                });
+
+            modelBuilder.Entity("CozaStoreAPI.Infrastructure.Data.Models.StatusOrder", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

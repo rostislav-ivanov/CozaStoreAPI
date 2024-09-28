@@ -15,10 +15,12 @@ namespace CozaStoreAPI.Infrastructure.Data.DataConfiguration
                 UserName = "test@test.com",
                 NormalizedUserName = "TEST@TEST.COM",
                 Email = "test@test.com",
+                PhoneNumber = "0888 888 888",
                 NormalizedEmail ="TEST@TEST.COM",
                 EmailConfirmed = true,
                 FirstName = "TestFirstName",
                 LastName = "TestLastName",
+                SecurityStamp = "NNC2KI3MK4ONPNJIS5HUOKHN3565MBID"
             },
         };
 

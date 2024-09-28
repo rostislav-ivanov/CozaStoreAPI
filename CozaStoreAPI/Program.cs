@@ -1,6 +1,5 @@
-using CozaStoreAPI.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using CozaStoreAPI.Core.Services;
+using CozaStoreAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +7,7 @@ builder.Services.AddAppDbContext(builder.Configuration);
 builder.Services.AddAppIdentity();
 builder.Services.AddAppServices();
 builder.Services.AddCorsPolicy();
+builder.Services.AddHostedService<DailyDataRetrievalService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -26,20 +26,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapIdentityApi<AppUser>();
-
-app.MapPost("/logout", async (SignInManager<AppUser> signInManager,
-    [FromBody] object empty) =>
-{
-    if (empty != null)
-    {
-        await signInManager.SignOutAsync();
-        return Results.Ok();
-    }
-    return Results.Unauthorized();
-})
-.RequireAuthorization();
+app.UseMiddleware<ValidateUserIdMiddleware>();
 
 app.MapControllers();
 

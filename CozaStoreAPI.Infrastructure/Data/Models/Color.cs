@@ -11,6 +11,7 @@ namespace CozaStoreAPI.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Comment("The color's name")]
+        [MaxLength(DataConstants.Color.NameMaxLength)]
         public required string Name { get; set; }
 
         [Comment("Navigation Property to product's color")]
