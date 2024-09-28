@@ -3,7 +3,6 @@ using CozaStoreAPI.Core.Services;
 using CozaStoreAPI.Infrastructure.Data;
 using CozaStoreAPI.Infrastructure.Data.Models;
 using CozaStoreAPI.ModelBinders;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
