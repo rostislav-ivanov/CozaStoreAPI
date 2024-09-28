@@ -41,7 +41,7 @@ namespace CozaStoreAPI.Controllers
 
         // POST api/orders
         [HttpPost]
-        public async Task<ActionResult<string>> CreateOrder(OrderDTO order)
+        public async Task<ActionResult<string>> CreateOrder([FromBody] OrderDTO order)
         {
             Guid userId = User.GetUserId();
 

@@ -1,8 +1,9 @@
-﻿using CozaStoreAPI.Core.Contracts;
+﻿using CozaStoreAPI.Common.ModelBinders;
+using CozaStoreAPI.Core.Contracts;
 using CozaStoreAPI.Core.Services;
 using CozaStoreAPI.Infrastructure.Data;
 using CozaStoreAPI.Infrastructure.Data.Models;
-using CozaStoreAPI.ModelBinders;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -15,7 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
             });
-
 
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IWishesService, WishesService>();

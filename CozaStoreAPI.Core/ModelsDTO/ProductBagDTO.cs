@@ -1,4 +1,6 @@
-﻿using CozaStoreAPI.Infrastructure;
+﻿using CozaStoreAPI.Common.ModelBinders;
+using CozaStoreAPI.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using static CozaStoreAPI.Infrastructure.DataConstants.ErrorMessageConstants;
 
@@ -20,6 +22,7 @@ namespace CozaStoreAPI.Core.ModelsDTO
         [Required(ErrorMessage = RequiredField)]
         [Range(0, double.MaxValue, ErrorMessage = NegativOrZeroNumber)]
         [Display(Name = "Product Price")]
+        [ModelBinder(BinderType = typeof(DecimalModelBinder))]
         public decimal Price { get; set; }
 
         [MaxLength(DataConstants.Size.NameMaxLength, ErrorMessage = StringLengthMax)]

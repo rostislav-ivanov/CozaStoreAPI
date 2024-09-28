@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 
-namespace CozaStoreAPI.ModelBinders
+namespace CozaStoreAPI.Common.ModelBinders
 {
     public class DecimalModelBinder : IModelBinder
     {

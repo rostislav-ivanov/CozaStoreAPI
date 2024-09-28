@@ -23,6 +23,7 @@
 
     <ItemGroup>
 		<ProjectReference Include="..\CozaStoreAPI.Core\CozaStoreAPI.Core.csproj" />
+		<ProjectReference Include="..\CozaStoreAPI.Common\CozaStoreAPI.Common.csproj" />
 	</ItemGroup>
 
 </Project>

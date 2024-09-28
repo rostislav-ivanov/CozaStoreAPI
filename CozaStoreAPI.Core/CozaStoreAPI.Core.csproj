@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CozaStoreAPI.Infrastructure\CozaStoreAPI.Infrastructure.csproj" />
+		<ProjectReference Include="..\CozaStoreAPI.Common\CozaStoreAPI.Common.csproj" />
 	</ItemGroup>	
 
 </Project>
