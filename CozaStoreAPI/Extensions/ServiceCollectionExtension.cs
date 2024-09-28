@@ -24,6 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IEcontService, EcontService>();
             services.AddScoped<IShippingProviderService, ShippingProviderService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddHttpClient();
 
             return services;
         }

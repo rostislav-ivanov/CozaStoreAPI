@@ -23,7 +23,7 @@ namespace CozaStoreAPI.Controllers
         {
             try
             {
-                var cities = await _econtService.GeCitiesAsync();
+                var cities = await _econtService.GetCitiesAsync();
 
                 return Ok(cities);
             }

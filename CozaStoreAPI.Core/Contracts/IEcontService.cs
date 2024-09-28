@@ -5,7 +5,7 @@ namespace CozaStoreAPI.Core.Contracts
 {
     public interface IEcontService
     {
-        Task<IEnumerable<CityDTO>> GeCitiesAsync();
+        Task<IEnumerable<CityDTO>> GetCitiesAsync();
         Task<IEnumerable<OfficeDTO>> GetOfficesAsync(int cityId);
     }
 }
