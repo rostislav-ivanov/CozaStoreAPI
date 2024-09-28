@@ -1,4 +1,5 @@
 using CozaStoreAPI.Core.Services;
+using CozaStoreAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseMiddleware<ValidateUserIdMiddleware>();
+app.UseMiddleware<ValidateUserIdMiddleware>();
 
 app.MapControllers();
 

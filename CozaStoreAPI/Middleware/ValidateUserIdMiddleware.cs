@@ -30,10 +30,9 @@ namespace CozaStoreAPI.Middleware
             }
             else
             {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("User ID is missing.");
-                return;
+                await _next(context);
             }
+
         }
     }
 
