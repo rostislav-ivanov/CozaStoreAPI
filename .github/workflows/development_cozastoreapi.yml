@@ -61,5 +61,5 @@ jobs:
         with:
           app-name: 'CozaStoreAPI'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/myapp/CozaStoreAPI.dll
+          package: .
           
