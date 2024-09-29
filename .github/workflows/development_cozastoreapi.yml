@@ -34,7 +34,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestAZUREAPPSERVICE_CLIENTID_9A1C0D9F54394523A4DEE13BFF2EC900
     needs: build
     environment:
       name: 'Production'
