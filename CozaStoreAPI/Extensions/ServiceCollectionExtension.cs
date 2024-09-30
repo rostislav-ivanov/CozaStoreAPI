@@ -65,14 +65,18 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.AddPolicy("AllowSpecificOrigins",
                     policy =>
                     {
-                        policy.WithOrigins("https://localhost:5173") // React frontend URL
-                               .AllowAnyHeader()
-                               .AllowAnyMethod()
-                               .AllowCredentials();
+                        policy.WithOrigins(
+                            "https://localhost:5173", // React frontend URL
+                            "https://cozastore.z1.web.core.windows.net" // New origin
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                     });
             });
 
             return services;
         }
+
     }
 }
