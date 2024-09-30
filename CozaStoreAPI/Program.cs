@@ -3,6 +3,7 @@ using CozaStoreAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddConfigureApplication();
 builder.Services.AddAppDbContext(builder.Configuration);
 builder.Services.AddAppIdentity();
 builder.Services.AddAppServices();

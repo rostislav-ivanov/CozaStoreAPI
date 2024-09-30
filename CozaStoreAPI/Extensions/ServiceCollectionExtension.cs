@@ -10,6 +10,20 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtension
     {
+        public static IServiceCollection AddConfigureApplication(this IServiceCollection services)
+        {
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.IsEssential = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
             services.AddControllers(options =>
